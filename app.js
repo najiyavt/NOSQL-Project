@@ -22,18 +22,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
   User.findById("6686b15765b71dbd05cd7eb5")
     .then(user => {
-      if (!user) {
-        const error = new Error('User not found');
-        error.statusCode = 404;
-        throw error;
-      }      
-      req.user = user;
+      req.user = new User(user.name , user.email , user.cart , user._id);
       next();
     })
     .catch(err => {
       console.log(err);
-      next(err);
-
     });
 });
 User
