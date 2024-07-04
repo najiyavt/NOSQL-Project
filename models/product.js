@@ -7,7 +7,7 @@ class Product {
     this.price=price;
     this.imageUrl=imageUrl;
     this.description=description;
-    this._id=new mongodb.ObjectId(id);
+    this._id=id ? new mongodb.ObjectId(id):null;
   }
 
   save() {
@@ -41,14 +41,21 @@ class Product {
 
   static findById(prodId){
     const db = getDb();
-    if (!mongodb.ObjectId.isValid(prodId)) {
-      return Promise.reject(new Error('Invalid ID format'));
-    }
-
     return db.collection('products').findOne({ _id : new mongodb.ObjectId(prodId)})
     .then(products => {
       console.log(products);
       return products;
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
+
+  static deleteById(prodId){
+    const db = getDb();
+    return db.collection('products').deleteOne({ _id : new mongodb.ObjectId(prodId)})
+    .then(result => {
+      console.log('Deleted!');
     })
     .catch(err => {
       console.log(err);
