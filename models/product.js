@@ -1,5 +1,5 @@
 const getDb = require('../util/database').getDb;
-const mongoDb = require('mongodb')
+const mongodb = require('mongodb')
 
 class Product {
   constructor(title , imageUrl , price , description ) {
@@ -34,7 +34,11 @@ class Product {
 
   static findById(prodId){
     const db = getDb();
-    return db.collection('products').find({ _id : new mongoDb.ObjectId(prodId)}).next()
+    if (!mongodb.ObjectId.isValid(prodId)) {
+      return Promise.reject(new Error('Invalid ID format'));
+    }
+
+    return db.collection('products').findOne({ _id : new mongodb.ObjectId(prodId)})
     .then(products => {
       console.log(products);
       return products;
