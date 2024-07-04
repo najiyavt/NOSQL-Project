@@ -14,10 +14,13 @@ exports.postAddProduct = (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
   const product = new Product(
-    title ,
+    title,
     imageUrl,
-    price  , 
-    description);
+    price,
+    description,
+    null, // id (optional if updating)
+    req.user._id // userId
+  );
 
     product
     .save()
