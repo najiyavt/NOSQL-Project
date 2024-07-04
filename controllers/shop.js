@@ -4,7 +4,7 @@ exports.getProducts = (req, res, next) => {
   Product.fetchAll()
     .then(products => {
       res.render('shop/product-list', {
-        prods: products,
+        prods: products || [],
         pageTitle: 'All Products',
         path: '/products'
       });
