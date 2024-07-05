@@ -40,7 +40,8 @@ userSchema.methods.addToCart = function(product) {
         };
         this.cart = updatedCart;
         return this.save()
-}
+};
+
 
 module.exports = mongoose.model("User" , userSchema);
 
