@@ -5,9 +5,9 @@ const ObjectId = mongodb.ObjectId;
 
 class User{
   constructor(username , email , cart , id) {
-    this.username=username;
+    this.name=username;
     this.email=email;
-    this.cart=cart; //{items:[]}
+    this.cart = cart || { items: [] }; // Ensure cart is initialized
     this._id = id;
   }
 
@@ -55,8 +55,7 @@ class User{
     const productIds = this.cart.items.map(i => {
       return i.productId;
     });
-    return db
-      .collection('products')
+    return db.collection('products')
       .find({ _id: { $in: productIds } })
       .toArray()
       .then(products => {
@@ -75,9 +74,9 @@ class User{
     const updatedCartItems = this.cart.items.filter( item => {
       return item.productId.toString() !== productId.toString();
     });
+
     const db = getDb();
-    return db
-      .collection('users')
+    return db.collection('users')
       .updateOne(
         { _id: new ObjectId(this._id) },
         { $set: { cart: {items : updatedCartItems} } }
@@ -87,9 +86,12 @@ class User{
   static findById(userId){
     const db = getDb();
     return db.collection('users').findOne({ _id : new mongodb.ObjectId(userId)})
-    .then(users => {
-      console.log(users);
-      return users;
+    .then(user => {
+      if (!user.cart) {
+        user.cart = { items: [] }; // Ensure cart is initialized
+      }
+      console.log(user);
+      return user;
     })
     .catch(err => {
       console.log(err);
