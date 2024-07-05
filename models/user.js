@@ -11,10 +11,15 @@ const userSchema = new Schema ({
     type: String,
     required: true
   },
-  
+  cart: {
+    items: [{ 
+      productId: { type: Schema.Types.ObjectId ,required:true } , 
+      quantity: { type: Number , required : true } 
+    }
+  ]}
 });
 
-module.exports = mongoose.model("Users" , userSchema);
+module.exports = mongoose.model("User" , userSchema);
 
 
 // const getDb = require('../util/database').getDb;
